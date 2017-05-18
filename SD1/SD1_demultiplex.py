@@ -422,13 +422,13 @@ def prepare_files(o):
     """
     for key in samples:
         name = samples[key]
-        t = o + name + "_SD1.fasta"
+        t = o + name + "_SD1.fastq"
         
         # Directory path, lines list, lines written
         files[name] = [t,[], 1]
         
-    files["NO_MATCH"] = [o + "NO_MATCH.fasta", [], 1]
-    files["LOW_QUALITY_READS"] = [o + "LOW_QUALITY_READS.fasta", [], 1]
+    files["NO_MATCH"] = [o + "NO_MATCH.fastq", [], 1]
+    files["LOW_QUALITY_READS"] = [o + "LOW_QUALITY_READS.fastq", [], 1]
     
     for key in files:
         f = open(files[key][0], 'w')
@@ -463,8 +463,8 @@ def get_sample_name(read, filter_limit):
     if not ((leftBC in lbc) and (rightBC in rbc)):
         return "NO_MATCH"
     
-    if compute_phred_score(read) <= filter_limit:
-        return "LOW_QUALITY_READS"
+    # if compute_phred_score(read) <= filter_limit:
+    #     return "LOW_QUALITY_READS"
         
     ids = lbc[leftBC] + rbc[rightBC]
     
@@ -509,7 +509,9 @@ def format_line(read, tupl, name):
     the line.
     """
     read = read[5:-5]
-    line = format(read, "fasta")
+    line = format(read, "fastq")
+
+    # Format for qiime
     line = "{0}{1}_{2}:{3}".format(line[0], name, tupl[2], line[1:])
     tupl[1].append(line)
     tupl[2] += 1
